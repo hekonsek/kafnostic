@@ -2,30 +2,37 @@ package main
 
 import (
 	"fmt"
+	"github.com/hekonsek/osexit"
 	randomstrings "github.com/hekonsek/random-strings"
 	"github.com/spf13/cobra"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
+var consumeCluster string
+
 func init() {
-	RootCommand.AddCommand(ConsumeCommand)
+	consumeCommand.Flags().StringVarP(&consumeCluster, "cluster", "", "localhost", "")
+	RootCommand.AddCommand(consumeCommand)
 }
 
-var ConsumeCommand = &cobra.Command{
+var consumeCommand = &cobra.Command{
 	Use:   "consume",
 	Short: "consume",
 	Run: func(cmd *cobra.Command, args []string) {
 		c, err := kafka.NewConsumer(&kafka.ConfigMap{
-			"bootstrap.servers": "localhost",
+			"bootstrap.servers": consumeCluster,
 			"group.id":          randomstrings.ForHumanWithDashAndHash(),
 			"auto.offset.reset": "earliest",
 		})
+		defer func() {
+			osexit.ExitOnError(c.Close())
+		}()
 
 		if err != nil {
 			panic(err)
 		}
 
-		c.SubscribeTopics([]string{"myTopic"}, nil)
+		osexit.ExitOnError(c.SubscribeTopics([]string{"myTopic"}, nil))
 
 		for {
 			msg, err := c.ReadMessage(-1)
@@ -36,7 +43,5 @@ var ConsumeCommand = &cobra.Command{
 				fmt.Printf("Consumer error: %v (%v)\n", err, msg)
 			}
 		}
-
-		c.Close()
 	},
 }

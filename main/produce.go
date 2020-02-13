@@ -9,7 +9,10 @@ import (
 	"time"
 )
 
+var produceCluster string
+
 func init() {
+	ProduceCommand.Flags().StringVarP(&produceCluster, "cluster", "", "localhost", "")
 	RootCommand.AddCommand(ProduceCommand)
 }
 
@@ -17,7 +20,7 @@ var ProduceCommand = &cobra.Command{
 	Use:   "produce",
 	Short: "produce",
 	Run: func(cmd *cobra.Command, args []string) {
-		p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost"})
+		p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": produceCluster})
 		if err != nil {
 			osexit.ExitOnError(err)
 		}
