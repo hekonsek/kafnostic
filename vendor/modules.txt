@@ -1,6 +1,14 @@
 # github.com/Pallinder/go-randomdata v1.1.0
 github.com/Pallinder/go-randomdata
+# github.com/hekonsek/osexit v1.1.0
+github.com/hekonsek/osexit
 # github.com/hekonsek/random-strings v0.1.0
 github.com/hekonsek/random-strings
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
+# github.com/spf13/cobra v0.0.5
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.3
+github.com/spf13/pflag
 # gopkg.in/confluentinc/confluent-kafka-go.v1 v1.1.0
 gopkg.in/confluentinc/confluent-kafka-go.v1/kafka
